@@ -46,6 +46,7 @@ INSTALLED_APPS = [
     "flujo_compras",
     'corsheaders',
     'rest_framework_mongoengine',
+    'storages',
 ]
 
 MIDDLEWARE = [
