@@ -50,7 +50,7 @@ INSTALLED_APPS = [
     "django.contrib.messages",
     "django.contrib.staticfiles",
     "orders",
-    "receptions",
+    "products",
     "warehouses",
     'corsheaders',
     'rest_framework_mongoengine',

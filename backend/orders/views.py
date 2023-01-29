@@ -23,14 +23,10 @@ def file_handler(filename):
     # Check if the file is valid
     binary_data = file['Body'].read()
     wb = openpyxl.load_workbook(BytesIO(binary_data),data_only=True)
-    sheet = wb.active
+    ref = sheet = wb.active
     col_one, col_two = (sheet[1][0:2])
     if (col_one.value != "Sub inventario" and col_two.value != "PDV"):
         return HttpResponse(json.dumps({'status': 404, 'message': 'The file is not valid'}))
-    else:
-        print(col_one.value, col_two.value)
-        print(help(client.get_object))
-
     
 
 @csrf_exempt
