@@ -6,11 +6,14 @@ from utils import get_db_handle, parse_json
 from .models import Warehouse, Order, Inventory
 from django.views.decorators.csrf import csrf_exempt
 import json
-import boto3
+
 # Create your views here.
 @require_http_methods(['GET'])    
-def get_warehouse(request):
-    db, client = get_db_handle('ilusiones_db')
+def get_warehouse(request) -> HttpResponse:
+    '''
+    Endpoint to get one warehouse by the sub_inventory from the MongoDB Cluster database
+    '''
+    db = get_db_handle('ilusiones_db')
     collection = db['warehouses']
     _sub_inventory = request.GET['sub_inventory']
     res = list(collection.find({'sub_inventory': _sub_inventory}))
@@ -40,8 +43,11 @@ def get_warehouse(request):
 
 @csrf_exempt
 @require_http_methods(['POST']) 
-def create_warehouse(request):
-    db, client = get_db_handle('ilusiones_db')
+def create_warehouse(request) -> HttpResponse:
+    '''
+    Endpoint to validate and create one warehouse and insert it into the MongoDB Cluster database
+    '''
+    db = get_db_handle('ilusiones_db')
     collection = db['warehouses']
     data = json.loads(request.body)
     _sub_inventory = data['sub_inventory']
