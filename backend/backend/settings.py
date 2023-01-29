@@ -35,6 +35,12 @@ ALLOWED_HOSTS = []
 
 
 # Application definition
+AWS_ACCESS_KEY_ID=env('AWS_ACCESS_KEY_ID')
+AWS_SECRET_ACCESS_KEY=env('AWS_SECRET_ACCESS_KEY')
+AWS_STORAGE_BUCKET_NAME=env('AWS_STORAGE_BUCKET_NAME')
+AWS_S3_FILE_OVERWRITE=False
+AWS_DEFAULT_ACL=None
+DEFAULT_FILE_STORAGE=env('DEFAULT_FILE_STORAGE')
 
 INSTALLED_APPS = [
     "django.contrib.admin",
@@ -43,9 +49,12 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
-    "flujo_compras",
+    "orders",
+    "receptions",
+    "warehouses",
     'corsheaders',
     'rest_framework_mongoengine',
+    'storages',
 ]
 
 MIDDLEWARE = [
