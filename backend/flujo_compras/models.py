@@ -1,13 +1,14 @@
 from djongo import models
 from datetime import date
 # Create your models here.
-class Inventory(models.Model):
-    pass
+class Inventory(models.Model): #Inventario
+    model = models.CharField(max_length=200)
+    invoice = models.CharField(max_length=50)
+    imei = models.CharField(max_length=25)
 
-class Order(models.Model):
+class Order(models.Model): #Ordenes de compras
     date = models.DateField(default=date.today())
     file = models.URLField() #S3 file
-    
 
 class Warehouse(models.Model): #Almacenes
     name = models.CharField(max_length=100)
