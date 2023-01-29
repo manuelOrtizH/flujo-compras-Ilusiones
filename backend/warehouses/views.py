@@ -7,7 +7,6 @@ from .models import Warehouse, Order, Inventory
 from django.views.decorators.csrf import csrf_exempt
 import json
 import boto3
-
 # Create your views here.
 @require_http_methods(['GET'])    
 def get_warehouse(request):
@@ -38,6 +37,7 @@ def get_warehouse(request):
             }
         )
     )
+
 @csrf_exempt
 @require_http_methods(['POST']) 
 def create_warehouse(request):
@@ -76,7 +76,7 @@ def create_warehouse(request):
                     'headers': {
                         'Access-Control-Allow-Headers': '*',
                         'Access-Control-Allow-Origin': '*',
-                        'Access-Control-Allow-Methods': 'GET'
+                        'Access-Control-Allow-Methods': 'POST'
                 },'message': 'The record has been succesfully created'}))
         
     return HttpResponse(
@@ -85,7 +85,7 @@ def create_warehouse(request):
                     'headers': {
                         'Access-Control-Allow-Headers': '*',
                         'Access-Control-Allow-Origin': '*',
-                        'Access-Control-Allow-Methods': 'GET'
+                        'Access-Control-Allow-Methods': 'POST'
                 }, 'message': 'Record already exists'}))
 
 
