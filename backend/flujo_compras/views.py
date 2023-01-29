@@ -1,17 +1,23 @@
 from django.shortcuts import render
-from django.http import HttpResponse
-import environ
-env = environ.Env()
-environ.Env.read_env()
-from utils import get_db_handle
-# Create your views here.
+from django.http import HttpResponse, JsonResponse
+from django.forms.models import model_to_dict
+from bson.objectid import ObjectId
+from django.views.decorators.http import require_http_methods
+from utils import get_db_handle, parse_json
+from .models import Warehouse
+import json
 
-def index(request):
-    db, client = get_db_handle(env('COLLECTION_NAME'), env('HOSTNAME'))
-    collection = db['almacenes']
+# Create your views here.
+@require_http_methods(['GET', 'POST'])
+def warehouse(request):
+    db, client = get_db_handle('ilusiones_db')
+    collection = db['warehouses']
+    return HttpResponse('View')
     
-    person = {'name': 'Sammy', 'sub_inventory': 'uwu'}
-    collection.insert(person)
-    return HttpResponse('First view xd')
+
+        
+        
+
+    
 
 
