@@ -6,6 +6,7 @@ from utils import get_db_handle, parse_json
 from .models import Warehouse, Order, Inventory
 from django.views.decorators.csrf import csrf_exempt
 import json
+import boto3
 
 # Create your views here.
 @csrf_exempt
