@@ -15,8 +15,17 @@ def get_warehouse(request):
     collection = db['warehouses']
     _sub_inventory = request.GET['sub_inventory']
     res = list(collection.find({'sub_inventory': _sub_inventory}))
-    if not res: return HttpResponse(json.dumps({'status': 404, 'message': 'Record not found'}))
-    
+    if not res: 
+        return HttpResponse(
+                json.dumps(
+                    {   'status': 404, 
+                        'headers': {
+                            'Access-Control-Allow-Headers': '*',
+                            'Access-Control-Allow-Origin': '*',
+                            'Access-Control-Allow-Methods': 'GET'
+                        }, 
+                        'message': 'Record not found'}))
+        
     return HttpResponse(
         json.dumps(
             {   'status': 200,
@@ -45,7 +54,15 @@ def create_warehouse(request):
             warehouse_obj.orders = []
             warehouse_obj.inventories = []
         except Exception as e:
-            return HttpResponse(json.dumps({'status': 404, 'message': 'An error occurred with the given data'}))
+            return HttpResponse(
+                json.dumps(
+                    {   'status': 404, 
+                        'headers': {
+                            'Access-Control-Allow-Headers': '*',
+                            'Access-Control-Allow-Origin': '*',
+                            'Access-Control-Allow-Methods': 'POST'
+                    },
+                        'message': 'An error occurred with the given data'}))
         
         collection.insert({
             'name': warehouse_obj.name,
@@ -53,9 +70,23 @@ def create_warehouse(request):
             'orders': [],
             'inventories': []
         })
-        return HttpResponse(json.dumps({ 'status': 201, 'message': 'The record has been succesfully created'}))
+        return HttpResponse(
+                json.dumps(
+                {   'status': 201, 
+                    'headers': {
+                        'Access-Control-Allow-Headers': '*',
+                        'Access-Control-Allow-Origin': '*',
+                        'Access-Control-Allow-Methods': 'GET'
+                },'message': 'The record has been succesfully created'}))
         
-    return HttpResponse(json.dumps({'status': 404, 'message': 'Record already exists'}))
+    return HttpResponse(
+            json.dumps(
+                {   'status': 404,                 
+                    'headers': {
+                        'Access-Control-Allow-Headers': '*',
+                        'Access-Control-Allow-Origin': '*',
+                        'Access-Control-Allow-Methods': 'GET'
+                }, 'message': 'Record already exists'}))
 
 
 
