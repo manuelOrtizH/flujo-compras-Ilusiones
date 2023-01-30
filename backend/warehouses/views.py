@@ -15,8 +15,8 @@ def get_warehouse(request) -> HttpResponse:
     '''
     db = get_db_handle('ilusiones_db')
     collection = db['warehouses']
-    _sub_inventory = request.GET['sub_inventory']
-    res = list(collection.find({'sub_inventory': _sub_inventory}))
+    sub_inventory = request.GET['sub_inventory']
+    res = list(collection.find({'sub_inventory': sub_inventory}))
     if not res: 
         return HttpResponse(
                 json.dumps(
@@ -50,8 +50,8 @@ def create_warehouse(request) -> HttpResponse:
     db = get_db_handle('ilusiones_db')
     collection = db['warehouses']
     data = json.loads(request.body)
-    _sub_inventory = data['sub_inventory']
-    res = collection.find({'sub_inventory': _sub_inventory})
+    sub_inventory = data['sub_inventory']
+    res = collection.find({'sub_inventory': sub_inventory})
     if not list(res):
         warehouse_obj = Warehouse
         try:
@@ -97,7 +97,29 @@ def create_warehouse(request) -> HttpResponse:
 
 
 
+def update_orders(file: str, sub_inventory: str) -> HttpResponse:
+    '''
+    Whenever a order is created, update the warehouse by adding to the array the order added
+    sub_inventory: unique sub_inventory to identify the warehouse
+    order_id: The id of the order created
+    '''
+    db = get_db_handle('ilusiones_db')
+    collection = db['orders']
 
+    res = list(collection.find({'file': file}))
+    collection = db['warehouses']
+    try: 
+        collection.update({'sub_inventory': sub_inventory}, {"$push": {'orders': res[0]['_id']}})
+    except Exception as e:
+        return HttpResponse(
+            json.dumps(
+                {   'status': 404,                 
+                    'headers': {
+                        'Access-Control-Allow-Headers': '*',
+                        'Access-Control-Allow-Origin': '*',
+                        'Access-Control-Allow-Methods': 'POST'
+                }, 'message': 'There was a failure with the update'}))
+    
 
 
 

@@ -4,6 +4,7 @@ from bson.objectid import ObjectId
 from django.views.decorators.http import require_http_methods
 from utils import get_db_handle, upload_file
 from orders.models import Order
+from warehouses.views import update_orders
 from products.models import Inventory
 from django.views.decorators.csrf import csrf_exempt
 import json
@@ -79,16 +80,18 @@ def create_order(request) -> HttpResponse:
                 'file': order_obj.file
             })
 
-            return HttpResponse(
-                    json.dumps(
-                    {   'status': 201, 
-                        'headers': {
-                            'Access-Control-Allow-Headers': '*',
-                            'Access-Control-Allow-Origin': '*',
-                            'Access-Control-Allow-Methods': 'POST'
-                    },'message': 'The record has been succesfully created'}))
+            update_orders(file=order_obj.file, sub_inventory=sub_inventory)
+
+    return HttpResponse(
+            json.dumps(
+            {   'status': 201, 
+                'headers': {
+                    'Access-Control-Allow-Headers': '*',
+                    'Access-Control-Allow-Origin': '*',
+                    'Access-Control-Allow-Methods': 'POST'
+            },'message': 'The file has been succesfully readed and the orders were succesfully created'}))
 
 
 
 
-    return HttpResponse(json.dumps({'status': 200, 'message': 'uwu'}))
+    
