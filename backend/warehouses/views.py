@@ -118,7 +118,7 @@ def update_orders(date_created: datetime, sub_inventory: str) -> HttpResponse:
                     'headers': {
                         'Access-Control-Allow-Headers': '*',
                         'Access-Control-Allow-Origin': '*',
-                        'Access-Control-Allow-Methods': 'POST'
+                        'Access-Control-Allow-Methods': 'PUT'
                 }, 'message': 'There was a failure with the update'}))
     
 
