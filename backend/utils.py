@@ -1,13 +1,10 @@
 from pymongo import MongoClient
 import environ
-import json
 import openpyxl
 import pandas as pd
 import boto3
 from io import BytesIO
-import datetime
 import openpyxl
-from bson import json_util
 
 def get_db_handle(db_name: str) -> dict:
     '''
@@ -20,13 +17,6 @@ def get_db_handle(db_name: str) -> dict:
     client = MongoClient(host=env('HOSTNAME'), connect=False)
     db = client[db_name]
     return db
-
-def parse_json(data: dict)-> object:
-    '''
-    Parse the data given by an endpoint and return it as json
-    data: data provided by MongoDB 
-    '''
-    return json.loads(json_util.dumps(data))
 
 def file_handler(filename: str, root: str) -> bool or pd.DataFrame:
     '''
@@ -61,23 +51,26 @@ def upload_file(filename: str, root: str):
     with open(filename, 'rb') as f:
         client.upload_fileobj(f, 'm2crowd-ilusiones-bucket1', root)
 
-def is_imei_unique(imei: str, catalogue: list) -> bool:
-    for d in catalogue:
-        if imei == d['imei']:
-            return False
-    return True
-
-def update_list_from_warehouse(list_to_update: str, type_id: str, id: any, sub_inventory: str):
+def update_list(**data):
     '''
     Method to update a list 
     '''
     db = get_db_handle('ilusiones_db')
-    collection = db[list_to_update]
+    collection = db[data.get('list_to_update')]
 
-    res = list(collection.find({type_id: id}))
-    collection = db['warehouses']
+    res = list(collection.find({data.get('type_id'): data.get('id')}))
+    collection = db[data.get('collection_to_update')]
     try: 
-        collection.update({'sub_inventory': sub_inventory}, {"$push": {list_to_update: res[0]['_id']}})
+        collection.update({data.get('collection_type'): data.get('collection_id')}, 
+                         {"$push": {data.get('list_to_update'): res[0]['_id']}})
     except Exception as e:
         return e
-    return 'Succesfully updated'
+    
+def is_warehouse_in_db(sub_inventory: str) -> bool:
+    '''
+    Check if the sub_inventory exists or not
+    '''
+    db = get_db_handle('ilusiones_db')
+    collection = db['warehouses']
+    res = list(collection.find({'sub_inventory': sub_inventory}))
+    return False if not res else True

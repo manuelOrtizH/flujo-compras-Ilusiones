@@ -2,11 +2,11 @@ from django.shortcuts import render
 from django.http import HttpResponse, JsonResponse
 from bson.objectid import ObjectId
 from django.views.decorators.http import require_http_methods
-from utils import get_db_handle, parse_json
+from utils import get_db_handle
 from .models import Warehouse, Order, Inventory
 from django.views.decorators.csrf import csrf_exempt
 import json
-import datetime
+from bson import json_util
 
 # Create your views here.
 @require_http_methods(['GET'])    
@@ -29,7 +29,7 @@ def get_warehouse(request) -> HttpResponse:
                     'Access-Control-Allow-Origin': '*',
                     'Access-Control-Allow-Methods': 'GET'
                 },
-                'body': parse_json(res)
+                'body': json.loads(json_util.dumps(res))
             }
         )
     )

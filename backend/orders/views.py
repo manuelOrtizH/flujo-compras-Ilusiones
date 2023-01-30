@@ -4,18 +4,12 @@ from utils import get_db_handle, upload_file
 from orders.models import Order
 from django.views.decorators.csrf import csrf_exempt
 import json
-from utils import file_handler, update_list_from_warehouse
+from utils import file_handler, update_list, is_warehouse_in_db
 import openpyxl
 import math
 import os
 # Create your views here.
-def check_sub_inventory(_sub_inventory: str, db: dict) -> bool:
-    '''
-    Check if the sub_inventory exists or not
-    '''
-    collection = db['warehouses']
-    res = list(collection.find({'sub_inventory': _sub_inventory}))
-    return False if not res else True
+
 
 @csrf_exempt
 @require_http_methods(['POST']) 
@@ -36,7 +30,7 @@ def create_order(request) -> HttpResponse:
     cols = df.columns.values
     for _, col in df.iterrows():
         sub_inventory, pdv = col[0], col[1]
-        if check_sub_inventory(sub_inventory, db) and not isinstance(col[2], str):
+        if is_warehouse_in_db(sub_inventory) and not isinstance(col[2], str):
             workbook = openpyxl.Workbook()
             sheet = workbook.active
             sheet['A1'], sheet['B1'] = f'Inventario: ', sub_inventory
@@ -66,7 +60,12 @@ def create_order(request) -> HttpResponse:
                 'file': order_obj.file
             })
 
-            update_list_from_warehouse(list_to_update='orders', type_id='date', id=order_obj.date, sub_inventory=sub_inventory)
+            update_list(collection_to_update='warehouses', 
+                        list_to_update='orders', 
+                        type_id='date', 
+                        id=order_obj.date, 
+                        collection_id=sub_inventory,
+                        collection_type='sub_inventory')
 
     return HttpResponse(
             json.dumps(
