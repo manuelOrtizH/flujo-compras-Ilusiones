@@ -53,7 +53,15 @@ def upload_file(filename: str, root: str):
 
 def update_list(**data):
     '''
-    Method to update a list 
+    Method to update a list based on the next values:
+    data: {
+        collection_to_update: name of the collection where the list will be updated
+        list_to_update: name of the collection thath should be added to a list
+        id: the value we want to match
+        type_id: name of the attribute to find the record we want to add to the list
+        collection_id: the value we want to match from the collection to update
+        collection_type: name of the attribute to find collection we want to update
+    }
     '''
     db = get_db_handle('ilusiones_db')
     collection = db[data.get('list_to_update')]
@@ -68,7 +76,8 @@ def update_list(**data):
     
 def is_warehouse_in_db(sub_inventory: str) -> bool:
     '''
-    Check if the sub_inventory exists or not
+    Check if a warehouse exists or not based on the unique sub_inventory
+    sub_inventory: identifier of a warehouse
     '''
     db = get_db_handle('ilusiones_db')
     collection = db['warehouses']

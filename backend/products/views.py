@@ -13,7 +13,7 @@ from bson import json_util
 def create_product(request) -> HttpResponse:
     '''
     Obtain products from file and store the products in their respective inventories
-    Plus, adding this inventories to warehouses
+    Plus, adding this inventories to warehouses.
     '''
     db = get_db_handle('ilusiones_db')
     collection = db['products']
