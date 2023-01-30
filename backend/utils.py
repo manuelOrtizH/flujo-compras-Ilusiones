@@ -27,25 +27,35 @@ def parse_json(data: dict)-> object:
     '''
     return json.loads(json_util.dumps(data))
 
-def file_handler(filename: str) -> bool:
+def file_handler(filename: str, root: str) -> bool or pd.DataFrame:
     '''
     Verify the data in the xlsx file is correct. And retrieve the file from the S3 bucket
     Notice you should have the environment variables in your computer
     filename: name of the file to retrieve from the S3 bucket
+    root: name of the folder root where the file is stored in S3 bucket
     Returns if the file is not valid
     '''
     client = boto3.client('s3')
-    COLS_NAMES = ('Sub inventario', 'PDV', 'TOTAL') 
+    
     file = client.get_object(
         Bucket="m2crowd-ilusiones-bucket1",
-        Key=f'ordenes-de-compra/{filename}'
+        Key=f'{root}/{filename}'
     )
 
     binary_data = file['Body'].read()
     wb = openpyxl.load_workbook(BytesIO(binary_data),data_only=True)
     data = wb['Hoja1'].values
     df = pd.DataFrame(data, columns=next(data)[0:])
-    cols = df.columns.values
-    if (any(pd.isnull(cols)) or (cols[0], cols[1], cols[-1]) != COLS_NAMES): #Check for any null value
+    if (any(pd.isnull(df.columns.values))): #Check for any null value
         return False
-    return True
+    return True,df
+
+def upload_file(filename: str, root: str):
+    '''
+    Upload the new xlsx files generated to S3 bucket
+    filename: name of the file we want to upload
+    
+    '''
+    client = boto3.client('s3')
+    with open(filename, 'rb') as f:
+        client.upload_fileobj(f, 'm2crowd-ilusiones-bucket1', root)
