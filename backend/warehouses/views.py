@@ -97,7 +97,7 @@ def create_warehouse(request) -> HttpResponse:
 
 
 
-@require_http_methods(['PUT']) 
+@require_http_methods(['GET','PUT']) 
 def update_orders(date_created: datetime, sub_inventory: str) -> HttpResponse:
     '''
     Whenever a order is created, update the warehouse by adding to the array the order added
@@ -121,6 +121,6 @@ def update_orders(date_created: datetime, sub_inventory: str) -> HttpResponse:
                         'Access-Control-Allow-Methods': 'PUT'
                 }, 'message': 'There was a failure with the update'}))
     
-
-
-
+@require_http_methods(['GET', 'PUT'])
+def add_inventory(sub_inventory):
+    pass

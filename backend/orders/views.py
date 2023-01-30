@@ -31,7 +31,7 @@ def create_order(request) -> HttpResponse:
     cols = df.columns.values
     for _, col in df.iterrows():
         sub_inventory, pdv = col[0], col[1]
-        if check_sub_inventory(sub_inventory, db) and col[2]!='CERRADA POR CAMBIO DE LOCAL NO REALIZAR ENVIOS':
+        if check_sub_inventory(sub_inventory, db) and not isinstance(col[2], str):
             workbook = openpyxl.Workbook()
             sheet = workbook.active
             sheet['A1'], sheet['B1'] = f'Inventario: ', sub_inventory

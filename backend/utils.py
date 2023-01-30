@@ -59,3 +59,9 @@ def upload_file(filename: str, root: str):
     client = boto3.client('s3')
     with open(filename, 'rb') as f:
         client.upload_fileobj(f, 'm2crowd-ilusiones-bucket1', root)
+
+def is_imei_unique(imei: str, catalogue: list) -> bool:
+    for d in catalogue:
+        if imei == d['imei']:
+            return False
+    return True
