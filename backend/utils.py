@@ -5,6 +5,7 @@ import openpyxl
 import pandas as pd
 import boto3
 from io import BytesIO
+import datetime
 import openpyxl
 from bson import json_util
 
@@ -65,3 +66,18 @@ def is_imei_unique(imei: str, catalogue: list) -> bool:
         if imei == d['imei']:
             return False
     return True
+
+def update_list_from_warehouse(list_to_update: str, type_id: str, id: any, sub_inventory: str):
+    '''
+    Method to update a list 
+    '''
+    db = get_db_handle('ilusiones_db')
+    collection = db[list_to_update]
+
+    res = list(collection.find({type_id: id}))
+    collection = db['warehouses']
+    try: 
+        collection.update({'sub_inventory': sub_inventory}, {"$push": {list_to_update: res[0]['_id']}})
+    except Exception as e:
+        return e
+    return 'Succesfully updated'

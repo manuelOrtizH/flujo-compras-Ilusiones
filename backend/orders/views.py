@@ -2,10 +2,9 @@ from django.http import HttpResponse
 from django.views.decorators.http import require_http_methods
 from utils import get_db_handle, upload_file
 from orders.models import Order
-from warehouses.views import update_orders
 from django.views.decorators.csrf import csrf_exempt
 import json
-from utils import file_handler
+from utils import file_handler, update_list_from_warehouse
 import openpyxl
 import math
 import os
@@ -67,7 +66,7 @@ def create_order(request) -> HttpResponse:
                 'file': order_obj.file
             })
 
-            update_orders(date_created=order_obj.date, sub_inventory=sub_inventory)
+            update_list_from_warehouse(list_to_update='orders', type_id='date', id=order_obj.date, sub_inventory=sub_inventory)
 
     return HttpResponse(
             json.dumps(
@@ -76,5 +75,5 @@ def create_order(request) -> HttpResponse:
                     'Access-Control-Allow-Headers': '*',
                     'Access-Control-Allow-Origin': '*',
                     'Access-Control-Allow-Methods': 'POST'
-            },'message': 'The file has been succesfully readed and the orders were succesfully created'}))
+            },'message': 'The file has been succesfully read and the orders were succesfully created'}))
 

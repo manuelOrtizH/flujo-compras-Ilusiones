@@ -3,20 +3,10 @@ from django.views.decorators.http import require_http_methods
 from utils import get_db_handle
 from django.views.decorators.csrf import csrf_exempt
 import json
-from warehouses.views import add_inventory
+
 from .models import Product
-from utils import file_handler, parse_json, is_imei_unique
+from utils import file_handler, parse_json, is_imei_unique, update_list_from_warehouse
 # Create your views here.
-@require_http_methods(['GET','PUT'])
-def update_inventory(db,imei,sub_inventory):
-    collection = db['products']
-    res = collection.find({'imei': imei})
-    collection = db['inventories']
-    try: 
-        collection.update({'name': sub_inventory}, {"$push": {'products': res[0]['_id']}})
-    except Exception as e:
-        return HttpResponse(json.dumps({'status': 404, 'body': 'There was a failure with the update'}))
-    
 
 @csrf_exempt
 @require_http_methods(['POST', 'PUT'])
@@ -54,7 +44,7 @@ def create_product(request) -> HttpResponse:
                 'imei': product_obj.imei
             })
 
-        update_inventory(db,imei=imei, sub_inventory=sub_inventory)
+        #update_list_from_warehouse(db,imei=imei, sub_inventory=sub_inventory)
         # add_inventory(sub_inventory=sub_inventory)
 
     return HttpResponse(
