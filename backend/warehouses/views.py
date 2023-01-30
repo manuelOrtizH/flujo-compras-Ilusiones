@@ -97,12 +97,12 @@ def create_warehouse(request) -> HttpResponse:
 
 
 
-
+@require_http_methods(['PUT']) 
 def update_orders(date_created: datetime, sub_inventory: str) -> HttpResponse:
     '''
     Whenever a order is created, update the warehouse by adding to the array the order added
-    sub_inventory: unique sub_inventory to identify the warehouse
-    order_id: The id of the order created
+    date_created: unique date of creation of the order
+    sub_inventory: unique sub inventory to retrieve a warehouse
     '''
     db = get_db_handle('ilusiones_db')
     collection = db['orders']
