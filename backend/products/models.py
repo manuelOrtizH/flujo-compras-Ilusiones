@@ -7,5 +7,5 @@ class Product(models.Model):
     imei = models.CharField(max_length=25)
 
 class Inventory(models.Model): #Inventario
-    sub = models.CharField(max_length=100)
+    name = models.CharField(max_length=100)
     products = models.ArrayReferenceField(to=Product, on_delete=models.CASCADE)
