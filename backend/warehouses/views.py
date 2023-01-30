@@ -2,21 +2,25 @@ from django.shortcuts import render
 from django.http import HttpResponse, JsonResponse
 from bson.objectid import ObjectId
 from django.views.decorators.http import require_http_methods
-from utils import get_db_handle, parse_json
+from utils import get_db_handle
 from .models import Warehouse, Order, Inventory
 from django.views.decorators.csrf import csrf_exempt
 import json
-import boto3
+from bson import json_util
 
 # Create your views here.
 @require_http_methods(['GET'])    
-def get_warehouse(request):
-    db, client = get_db_handle('ilusiones_db')
+def get_warehouse(request) -> HttpResponse:
+    '''
+    Endpoint to get one warehouse by the sub_inventory from the MongoDB Cluster database
+    '''
+    db = get_db_handle('ilusiones_db')
     collection = db['warehouses']
-    _sub_inventory = request.GET['sub_inventory']
-    res = list(collection.find({'sub_inventory': _sub_inventory}))
-    if not res: return HttpResponse(json.dumps({'status': 404, 'message': 'Record not found'}))
-    
+    sub_inventory = request.GET['sub_inventory']
+    res = list(collection.find({'sub_inventory': sub_inventory}))
+    if not res: 
+        return HttpResponse(json.dumps({'status': 404, 'body': 'Record not found'}))
+        
     return HttpResponse(
         json.dumps(
             {   'status': 200,
@@ -25,18 +29,22 @@ def get_warehouse(request):
                     'Access-Control-Allow-Origin': '*',
                     'Access-Control-Allow-Methods': 'GET'
                 },
-                'body': parse_json(res)
+                'body': json.loads(json_util.dumps(res))
             }
         )
     )
+
 @csrf_exempt
 @require_http_methods(['POST']) 
-def create_warehouse(request):
-    db, client = get_db_handle('ilusiones_db')
+def create_warehouse(request) -> HttpResponse:
+    '''
+    Endpoint to validate and create one warehouse and insert it into the MongoDB Cluster database
+    '''
+    db = get_db_handle('ilusiones_db')
     collection = db['warehouses']
     data = json.loads(request.body)
-    _sub_inventory = data['sub_inventory']
-    res = collection.find({'sub_inventory': _sub_inventory})
+    sub_inventory = data['sub_inventory']
+    res = collection.find({'sub_inventory': sub_inventory})
     if not list(res):
         warehouse_obj = Warehouse
         try:
@@ -45,7 +53,8 @@ def create_warehouse(request):
             warehouse_obj.orders = []
             warehouse_obj.inventories = []
         except Exception as e:
-            return HttpResponse(json.dumps({'status': 404, 'message': 'An error occurred with the given data'}))
+            return HttpResponse(
+                json.dumps({'status': 404, 'body': 'An error occurred with the given data'}))
         
         collection.insert({
             'name': warehouse_obj.name,
@@ -53,14 +62,13 @@ def create_warehouse(request):
             'orders': [],
             'inventories': []
         })
-        return HttpResponse(json.dumps({ 'status': 201, 'message': 'The record has been succesfully created'}))
+        return HttpResponse(
+                json.dumps(
+                {   'status': 201, 
+                    'headers': {
+                        'Access-Control-Allow-Headers': '*',
+                        'Access-Control-Allow-Origin': '*',
+                        'Access-Control-Allow-Methods': 'POST'
+                },'message': 'The record has been succesfully created'}))
         
-    return HttpResponse(json.dumps({'status': 404, 'message': 'Record already exists'}))
-
-
-
-
-
-
-
-
+    return HttpResponse(json.dumps({'status': 404, 'body': 'Record already exists'}))

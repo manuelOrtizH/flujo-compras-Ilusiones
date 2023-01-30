@@ -1,6 +1,6 @@
 from djongo import models
 from orders.models import Order
-from receptions.models import Inventory
+from products.models import Inventory
 # Create your models here.
 
 class Warehouse(models.Model): #Almacenes
