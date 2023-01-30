@@ -10,15 +10,13 @@ from utils import file_handler, parse_json, is_imei_unique
 @require_http_methods(['GET','PUT'])
 def update_inventory(db,imei,sub_inventory):
     collection = db['inventories']
+    res = list(collection.find({'name'}))
     pass
+
 
 @csrf_exempt
 @require_http_methods(['POST', 'PUT'])
-def create_product(request) -> HttpResponse:
-    '''
-    Obtain products from file and store the products in their respective inventories
-    Plus, adding this inventories to warehouses
-    '''
+def create_product(request):
     db = get_db_handle('ilusiones_db')
     collection = db['products']
     res = list(collection.find())
@@ -27,7 +25,7 @@ def create_product(request) -> HttpResponse:
     is_file_valid,df = file_handler(filename, root='recepcion-mercancia')
     print(res)
     if not is_file_valid:
-        return HttpResponse(json.dumps({'status': 404, 'body': 'The file is not valid'}))
+        return HttpResponse(json.dumps({'status': 404, 'message': 'The file is not valid'}))
 
     df.reset_index()
     for _, col in df.iterrows():
@@ -57,14 +55,11 @@ def create_product(request) -> HttpResponse:
                             'Access-Control-Allow-Headers': '*',
                             'Access-Control-Allow-Origin': '*',
                             'Access-Control-Allow-Methods': 'POST'
-                        },'body': 'Success'}))
+                        },'message': 'Success'}))
 
 
 @require_http_methods(['GET'])
-def get_inventory(request) -> HttpResponse:
-    '''
-    Obtain the required inventory
-    '''
+def get_inventory(request):
     db = get_db_handle('ilusiones_db')
     collection = db['inventories']
     name = request.GET['name']

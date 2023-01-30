@@ -19,7 +19,15 @@ def get_warehouse(request) -> HttpResponse:
     sub_inventory = request.GET['sub_inventory']
     res = list(collection.find({'sub_inventory': sub_inventory}))
     if not res: 
-        return HttpResponse(json.dumps({'status': 404, 'body': 'Record not found'}))
+        return HttpResponse(
+                json.dumps(
+                    {   'status': 404, 
+                        'headers': {
+                            'Access-Control-Allow-Headers': '*',
+                            'Access-Control-Allow-Origin': '*',
+                            'Access-Control-Allow-Methods': 'GET'
+                        }, 
+                        'message': 'Record not found'}))
         
     return HttpResponse(
         json.dumps(
@@ -54,7 +62,14 @@ def create_warehouse(request) -> HttpResponse:
             warehouse_obj.inventories = []
         except Exception as e:
             return HttpResponse(
-                json.dumps({'status': 404, 'body': 'An error occurred with the given data'}))
+                json.dumps(
+                    {   'status': 404, 
+                        'headers': {
+                            'Access-Control-Allow-Headers': '*',
+                            'Access-Control-Allow-Origin': '*',
+                            'Access-Control-Allow-Methods': 'POST'
+                    },
+                        'message': 'An error occurred with the given data'}))
         
         collection.insert({
             'name': warehouse_obj.name,
@@ -71,7 +86,14 @@ def create_warehouse(request) -> HttpResponse:
                         'Access-Control-Allow-Methods': 'POST'
                 },'message': 'The record has been succesfully created'}))
         
-    return HttpResponse(json.dumps({'status': 404, 'body': 'Record already exists'}))
+    return HttpResponse(
+            json.dumps(
+                {   'status': 404,                 
+                    'headers': {
+                        'Access-Control-Allow-Headers': '*',
+                        'Access-Control-Allow-Origin': '*',
+                        'Access-Control-Allow-Methods': 'POST'
+                }, 'message': 'Record already exists'}))
 
 
 
@@ -90,7 +112,14 @@ def update_orders(date_created: datetime, sub_inventory: str) -> HttpResponse:
     try: 
         collection.update({'sub_inventory': sub_inventory}, {"$push": {'orders': res[0]['_id']}})
     except Exception as e:
-        return HttpResponse(json.dumps({'status': 404, 'body': 'There was a failure with the update'}))
+        return HttpResponse(
+            json.dumps(
+                {   'status': 404,                 
+                    'headers': {
+                        'Access-Control-Allow-Headers': '*',
+                        'Access-Control-Allow-Origin': '*',
+                        'Access-Control-Allow-Methods': 'PUT'
+                }, 'message': 'There was a failure with the update'}))
     
 @require_http_methods(['GET', 'PUT'])
 def add_inventory(sub_inventory):
