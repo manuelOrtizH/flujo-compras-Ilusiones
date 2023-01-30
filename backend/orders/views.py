@@ -3,8 +3,7 @@ from django.http import HttpResponse, JsonResponse
 from bson.objectid import ObjectId
 from django.views.decorators.http import require_http_methods
 from utils import get_db_handle, upload_file
-from warehouses.models import Warehouse
-from warehouses.views import get_warehouse
+from orders.models import Order
 from products.models import Inventory
 from django.views.decorators.csrf import csrf_exempt
 import json
@@ -12,14 +11,12 @@ import boto3
 from utils import file_handler, parse_json
 import pandas as pd
 import openpyxl
-
+import math
 # Create your views here.
-@require_http_methods(['GET'])
 def check_sub_inventory(_sub_inventory: str, db: dict) -> bool:
     collection = db['warehouses']
     res = list(collection.find({'sub_inventory': _sub_inventory}))
     return False if not res else True
-
 
 @csrf_exempt
 @require_http_methods(['POST']) 
@@ -37,22 +34,61 @@ def create_order(request) -> HttpResponse:
     cols = df.columns.values
     for _, col in df.iterrows():
         sub_inventory, pdv = col[0], col[1]
-        if check_sub_inventory(sub_inventory, db) or col[2]!='CERRADA POR CAMBIO DE LOCAL NO REALIZAR ENVIOS':
+        if check_sub_inventory(sub_inventory, db) and col[2]!='CERRADA POR CAMBIO DE LOCAL NO REALIZAR ENVIOS':
             workbook = openpyxl.Workbook()
             sheet = workbook.active
             sheet['A1'], sheet['B1'] = f'Inventario: ', sub_inventory
             sheet['A2'], sheet['B2'] = f'Cliente: ', pdv
-            for j,sku in enumerate(col[2:-1],2):
-                if not sku:
-                    sheet[f'A{j+1}'], sheet[f'B{j+1}'] = cols[j], sku
-                
-            workbook.save(filename=f'{sub_inventory}.xlsx')
+            j = 2
+            for sku in col[2:-1]:
+                if sku and not math.isnan(float(sku)):
+                    sheet[f'A{j+1}'] = cols[j]
+                    sheet[f'B{j+1}'] = sku
+                    j+=1
+            filename=f'{sub_inventory}.xlsx'
+            workbook.save(filename=filename)
             try:
-                pass
-                #upload_file()
-                #update_orders()
-            except Exception e:
-                pass
+                upload_file(filename,root=f'ordenes-de-compra/{filename}')
+            except Exception as e:
+                return HttpResponse(
+                        json.dumps(
+                            {   'status': 404, 
+                                'headers': {
+                                    'Access-Control-Allow-Headers': '*',
+                                    'Access-Control-Allow-Origin': '*',
+                                    'Access-Control-Allow-Methods': 'POST'
+                                }, 
+                                'message': 'An error occurred when uploading the file'}))
+
+            order_obj = Order()
+            try:
+                order_obj.file = f"s3://m2crowd-ilusiones-bucket1/ordenes-de-compra/{filename}"
+            except Exception as e:
+                return HttpResponse(
+                    json.dumps(
+                        {   'status': 404, 
+                            'headers': {
+                                'Access-Control-Allow-Headers': '*',
+                                'Access-Control-Allow-Origin': '*',
+                                'Access-Control-Allow-Methods': 'POST'
+                        },  'body': e,
+                            'message': 'An error occurred with the given data'}))
+            
+            collection.insert({
+                'date': order_obj.date,
+                'file': order_obj.file
+            })
+
+            return HttpResponse(
+                    json.dumps(
+                    {   'status': 201, 
+                        'headers': {
+                            'Access-Control-Allow-Headers': '*',
+                            'Access-Control-Allow-Origin': '*',
+                            'Access-Control-Allow-Methods': 'POST'
+                    },'message': 'The record has been succesfully created'}))
+
+
 
 
     return HttpResponse(json.dumps({'status': 200, 'message': 'uwu'}))
