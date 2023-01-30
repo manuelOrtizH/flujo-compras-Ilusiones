@@ -6,6 +6,7 @@ from utils import get_db_handle, parse_json
 from .models import Warehouse, Order, Inventory
 from django.views.decorators.csrf import csrf_exempt
 import json
+import datetime
 
 # Create your views here.
 @require_http_methods(['GET'])    
@@ -97,7 +98,7 @@ def create_warehouse(request) -> HttpResponse:
 
 
 
-def update_orders(file: str, sub_inventory: str) -> HttpResponse:
+def update_orders(date_created: datetime, sub_inventory: str) -> HttpResponse:
     '''
     Whenever a order is created, update the warehouse by adding to the array the order added
     sub_inventory: unique sub_inventory to identify the warehouse
@@ -106,7 +107,7 @@ def update_orders(file: str, sub_inventory: str) -> HttpResponse:
     db = get_db_handle('ilusiones_db')
     collection = db['orders']
 
-    res = list(collection.find({'file': file}))
+    res = list(collection.find({'date': date_created}))
     collection = db['warehouses']
     try: 
         collection.update({'sub_inventory': sub_inventory}, {"$push": {'orders': res[0]['_id']}})

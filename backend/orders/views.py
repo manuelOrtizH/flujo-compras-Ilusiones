@@ -8,6 +8,7 @@ import json
 from utils import file_handler
 import openpyxl
 import math
+import os
 # Create your views here.
 def check_sub_inventory(_sub_inventory: str, db: dict) -> bool:
     collection = db['warehouses']
@@ -55,7 +56,7 @@ def create_order(request) -> HttpResponse:
                                     'Access-Control-Allow-Methods': 'POST'
                                 }, 
                                 'message': 'An error occurred when uploading the file'}))
-
+            os.remove(filename)
             order_obj = Order()
             try:
                 order_obj.file = f"s3://m2crowd-ilusiones-bucket1/ordenes-de-compra/{filename}"
@@ -75,7 +76,7 @@ def create_order(request) -> HttpResponse:
                 'file': order_obj.file
             })
 
-            update_orders(file=order_obj.file, sub_inventory=sub_inventory)
+            update_orders(date_created=order_obj.date, sub_inventory=sub_inventory)
 
     return HttpResponse(
             json.dumps(
