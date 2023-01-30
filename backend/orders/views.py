@@ -11,6 +11,9 @@ import math
 import os
 # Create your views here.
 def check_sub_inventory(_sub_inventory: str, db: dict) -> bool:
+    '''
+    Check if the sub_inventory exists or not
+    '''
     collection = db['warehouses']
     res = list(collection.find({'sub_inventory': _sub_inventory}))
     return False if not res else True
@@ -18,6 +21,9 @@ def check_sub_inventory(_sub_inventory: str, db: dict) -> bool:
 @csrf_exempt
 @require_http_methods(['POST']) 
 def create_order(request) -> HttpResponse:
+    '''
+    Creation and reading of the purchase order plus updating the warehouse list of orders
+    '''
     db = get_db_handle('ilusiones_db')
     collection = db['orders']
     data = json.loads(request.body)
@@ -47,29 +53,14 @@ def create_order(request) -> HttpResponse:
             try:
                 upload_file(filename,root=f'ordenes-de-compra/{filename}')
             except Exception as e:
-                return HttpResponse(
-                        json.dumps(
-                            {   'status': 404, 
-                                'headers': {
-                                    'Access-Control-Allow-Headers': '*',
-                                    'Access-Control-Allow-Origin': '*',
-                                    'Access-Control-Allow-Methods': 'POST'
-                                }, 
-                                'message': 'An error occurred when uploading the file'}))
+                return HttpResponse(json.dumps({'status': 404, 'body': 'An error occurred when uploading the file', 'error': e}))
+
             os.remove(filename)
             order_obj = Order()
             try:
                 order_obj.file = f"s3://m2crowd-ilusiones-bucket1/ordenes-de-compra/{filename}"
             except Exception as e:
-                return HttpResponse(
-                    json.dumps(
-                        {   'status': 404, 
-                            'headers': {
-                                'Access-Control-Allow-Headers': '*',
-                                'Access-Control-Allow-Origin': '*',
-                                'Access-Control-Allow-Methods': 'POST'
-                        },  'body': e,
-                            'message': 'An error occurred with the given data'}))
+                return HttpResponse(json.dumps({'status': 404, 'body': 'An error occurred with the given data','error': e}))
             
             collection.insert({
                 'date': order_obj.date,
@@ -87,7 +78,3 @@ def create_order(request) -> HttpResponse:
                     'Access-Control-Allow-Methods': 'POST'
             },'message': 'The file has been succesfully readed and the orders were succesfully created'}))
 
-
-
-
-    
