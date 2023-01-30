@@ -9,14 +9,8 @@ from utils import file_handler, parse_json, is_imei_unique
 # Create your views here.
 @require_http_methods(['GET','PUT'])
 def update_inventory(db,imei,sub_inventory):
-    collection = db['products']
-    res = collection.find({'imei': imei})
     collection = db['inventories']
-    try: 
-        collection.update({'name': sub_inventory}, {"$push": {'products': res[0]['_id']}})
-    except Exception as e:
-        return HttpResponse(json.dumps({'status': 404, 'body': 'There was a failure with the update'}))
-    
+    pass
 
 @csrf_exempt
 @require_http_methods(['POST', 'PUT'])
@@ -54,7 +48,7 @@ def create_product(request) -> HttpResponse:
                 'imei': product_obj.imei
             })
 
-        update_inventory(db,imei=imei, sub_inventory=sub_inventory)
+        # update_inventory(db,imei=imei, sub_inventory=sub_inventory)
         # add_inventory(sub_inventory=sub_inventory)
 
     return HttpResponse(
