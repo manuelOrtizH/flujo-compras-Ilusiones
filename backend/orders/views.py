@@ -1,16 +1,11 @@
-from django.shortcuts import render
-from django.http import HttpResponse, JsonResponse
-from bson.objectid import ObjectId
+from django.http import HttpResponse
 from django.views.decorators.http import require_http_methods
 from utils import get_db_handle, upload_file
 from orders.models import Order
 from warehouses.views import update_orders
-from products.models import Inventory
 from django.views.decorators.csrf import csrf_exempt
 import json
-import boto3
-from utils import file_handler, parse_json
-import pandas as pd
+from utils import file_handler
 import openpyxl
 import math
 # Create your views here.
