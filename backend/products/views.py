@@ -35,7 +35,7 @@ def create_product(request) -> HttpResponse:
                 product_obj.imei = imei
                 product_obj.invoice = invoice
             except Exception as e:
-                return HttpResponse(json.dumps({'status': 404, 'body': 'An error occurred with the data'}))
+                return HttpResponseBadRequest(json.dumps({'status': 404, 'body': 'An error occurred with the data'}))
 
             if imei not in imeis_added:
                 collection.insert({
