@@ -13,28 +13,28 @@ const Header = () => {
                 <Navbar.Toggle aria-controls="basic-navbar-nav" />
                 <Navbar.Collapse id="basic-navbar-nav">
                 <Nav className="me-auto">
-                    <Nav.Link >
+                    
                         <li className="nav-item ">
-                            <Link to="/" className="nav-link text-white">Inicio</Link>
+                            <Link id="RouterNavLink" to="/" className="nav-link text-white">Inicio</Link>
                         </li>
-                    </Nav.Link>
-                    <Nav.Link >
+                    
+                    
                         <li className="nav-item ">
-                            <Link to="/warehouses" className="nav-link text-white">Almacenes</Link>
+                            <Link id="RouterNavLink" to="/warehouses" className="nav-link text-white">Almacenes</Link>
                         </li>
-                    </Nav.Link>
+                    
                     <li className="nav-item text-white">
-                        <NavDropdown className="text-white mt-2" title={<span className="text-white ">Mercancía</span>} id="basic-nav-dropdown">
+                        <NavDropdown className="text-white" title={<span className="text-white ">Mercancía</span>} id="basic-nav-dropdown">
                             <NavDropdown.Item>
-                                <Link to="/inventaries" className="nav-link text-black">Inventarios</Link>
+                                <Link id="RouterNavLink" to="/inventaries" className="nav-link text-black">Inventarios</Link>
                             </NavDropdown.Item>
                             <NavDropdown.Divider />
                             <NavDropdown.Item>
-                                <Link to="/orders" className="nav-link text-black">Órdenes de Compra</Link>
+                                <Link id="RouterNavLink" to="/orders" className="nav-link text-black">Órdenes de Compra</Link>
                             </NavDropdown.Item>
                             <NavDropdown.Divider />
                             <NavDropdown.Item>
-                                <Link to="/receptions" className="nav-link text-black">Recepción de Mercancía</Link>
+                                <Link id="RouterNavLink" to="/receptions" className="nav-link text-black">Recepción de Mercancía</Link>
                             </NavDropdown.Item>
                         </NavDropdown>
                     </li>
