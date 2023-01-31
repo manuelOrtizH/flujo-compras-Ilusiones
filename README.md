@@ -7,12 +7,12 @@ de Orden de Compras y otro archivo Excel de Recepción de Mercancía.
 Caso desarrollado por Manuel Ortiz para la empresa M2CROWD
 
 Estructura del proyecto:
-  -Backend: Django.
-  -Frontend: React.
-  -Base de datos: MongoDB Atlas Cluster.
-  -Python: Lenguaje de programación utilizado en el backend.
-  -JavaScript: Lenguaje de programación utilizado en el frontend.
-  -AWS: Infrastructura de AWS para elementos del proyecto 
+  - Backend: Django.
+  - Frontend: React.
+  - Base de datos: MongoDB Atlas Cluster.
+  - Python: Lenguaje de programación utilizado en el backend.
+  - JavaScript: Lenguaje de programación utilizado en el frontend.
+  - AWS: Infrastructura de AWS para elementos del proyecto 
 
 
 
