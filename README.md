@@ -4,6 +4,8 @@ La empresa Ilusiones S.A. de C.V. vende equipos celulares y necesita realizar co
 a través de 2 archivos que envía la empresa matriz y que corresponden a 2 archivos: un archivo Excel
 de Orden de Compras y otro archivo Excel de Recepción de Mercancía.
 
+Caso desarrollado por Manuel Ortiz para la empresa M2CROWD
+
 # Requisitos de instalación:
 
 - [Python 3.10](https://www.python.org/downloads/)
