@@ -8,7 +8,7 @@ import './styles/Header.css'
 
 const Header = () => {
     return(
-        <Navbar bg="dark" expand="lg">
+        <Navbar style={{'backgroundColor': '#31373d'}} expand="lg">
             <Container>
                 <Navbar.Toggle aria-controls="basic-navbar-nav" />
                 <Navbar.Collapse id="basic-navbar-nav">

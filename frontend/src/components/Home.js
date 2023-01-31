@@ -32,7 +32,7 @@ const Home = () => {
                                 alt='sda'
                             />
                             </Card.Body>
-                            <Card.Footer justify="flex-start" style={{backgroundColor: '#880808'}}>
+                            <Card.Footer justify="flex-start" style={{backgroundColor: '#32393f'}}>
                             <Row wrap="wrap" justify="space-between">
                                 <Text b style={{fontSize: '25px', color: 'white'}}>Crea y registra los diferentes almacenes</Text>
                             </Row>
@@ -50,7 +50,7 @@ const Home = () => {
                                 alt='sda'
                             />
                             </Card.Body>
-                            <Card.Footer justify="flex-start" style={{backgroundColor: '#880808'}}>
+                            <Card.Footer justify="flex-start" style={{backgroundColor: '#32393f'}}>
                             <Row wrap="wrap" justify="space-between">
                             <Text b style={{fontSize: '25px', color: 'white'}}>Consulta inventarios por almancenes</Text>
                             </Row>
@@ -68,7 +68,7 @@ const Home = () => {
                                 alt='sda'
                             />
                             </Card.Body>
-                            <Card.Footer justify="flex-start" style={{backgroundColor: '#880808'}}>
+                            <Card.Footer justify="flex-start" style={{backgroundColor: '#32393f'}}>
                             <Row wrap="wrap" justify="space-between">
                                 <Text b style={{fontSize: '25px', color: 'white'}}>Sube archivos de órdenes y de mercancía</Text>
                             </Row>
