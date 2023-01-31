@@ -12,7 +12,7 @@ const Products = () => {
     const [isLoading, setIsLoading] = useState(false);
 
 
-    const createOrders = async(filename='Orden de Compras.xlsx') => {
+    const createOrders = async(filename) => {
         let title = 'Éxito';
         let description = 'Se han creado todas las órdenes con éxito';
         let type = 'success'; 
@@ -30,7 +30,7 @@ const Products = () => {
         setIsLoading(false);
     };
 
-    const createProducts = async(filename='Recepcion de Mercancia.xlsx') => {
+    const createProducts = async(filename) => {
         let title = 'Éxito';
         let description = 'Se han creado los productos con éxito';
         let type = 'success'; 
@@ -72,9 +72,9 @@ const Products = () => {
             }
         });
         if (type==='ordenes-de-compra'){
-            createOrders();
+            createOrders(file.name);
         }else {
-            createProducts();
+            createProducts(file.name);
         }
         
 

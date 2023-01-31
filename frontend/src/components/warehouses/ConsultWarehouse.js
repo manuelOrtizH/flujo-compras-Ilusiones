@@ -4,33 +4,9 @@ import Table from 'react-bootstrap/Table';
 
 const ConsultWarehouse = (props) => {
     const [products, setProducts] = useState(props.products);
-    let tableRows = [];
     const [inputText, setInputText] = useState("");
 
-    // useEffect(() => {
-    //     if(inputText){
-    //         setProducts(products.filter(record => record.imei === inputText));
-    //     }else{
-    //         setProducts(props.products);
-    //     } 
-        
-    // }, [inputText,products, props.products]);
-
     const inputHandler = (e) => { setInputText(e.target.value.toUpperCase())};
-
-    // for (const [key,value] of Object.entries(products)){
-    //     tableRows.push(
-    //         <tr key={key} value={value.imei}>
-    //             <td>{value.model}</td>
-    //             <td>{value.invoice}</td>
-    //             <td>{value.imei}</td>
-    //         </tr>
-    //     );
-    // };
-
-    
-    
-
 
     return(
         <div className="container mb-5">
