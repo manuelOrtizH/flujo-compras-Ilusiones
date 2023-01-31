@@ -7,7 +7,7 @@ const ConsultWarehouse = (props) => {
 
     for (const [key,value] of Object.entries(products)){
         tableRows.push(
-            <tr key={key}>
+            <tr key={value.$oid} value={value.$oid}>
                 <td>{value.model}</td>
                 <td>{value.invoice}</td>
                 <td>{value.imei}</td>
