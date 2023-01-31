@@ -1,11 +1,11 @@
-from django.http import HttpResponse
+from django.http import HttpResponse, HttpResponseBadRequest
 from django.views.decorators.http import require_http_methods
 from utils import get_db_handle
 from django.views.decorators.csrf import csrf_exempt
 import json
 from .models import Product
 from utils import file_handler, update_list, is_warehouse_in_db
-from bson import json_util
+from bson import json_util, ObjectId
 # Create your views here.
 
 @csrf_exempt
@@ -21,7 +21,7 @@ def create_product(request) -> HttpResponse:
     filename = data['filename']
     is_file_valid,df = file_handler(filename, root='recepcion-mercancia')
     if not is_file_valid:
-        return HttpResponse(json.dumps({'status': 404, 'body': 'The file is not valid'}))
+        return HttpResponseBadRequest(json.dumps({'status': 404, 'body': 'The file is not valid'}))
 
     df.reset_index()
     imeis_added = set()
@@ -82,7 +82,30 @@ def get_inventory(request) -> HttpResponse:
     res = list(collection.find({'name': name}))
 
     if not res: 
-        return HttpResponse(json.dumps({'status': 404, 'message': 'Record not found'}))
+        return HttpResponseBadRequest(json.dumps({'status': 404, 'message': 'Record not found'}))
+        
+    return HttpResponse(
+        json.dumps(
+            {   'status': 200,
+                'headers': {
+                    'Access-Control-Allow-Headers': '*',
+                    'Access-Control-Allow-Origin': '*',
+                    'Access-Control-Allow-Methods': 'GET'
+                },
+                'body': json.loads(json_util.dumps(res))
+            }
+        )
+    )
+
+def get_products(request) -> HttpResponse:
+    db = get_db_handle('ilusiones_db')
+    collection = db['products']
+    ids = list(map(lambda id: ObjectId(id), request.GET['ids'].split(',')))
+    
+    res = collection.find({'_id': {'$in': ids} })
+    
+    if not res: 
+        return HttpResponseBadRequest(json.dumps({'status': 404, 'message': 'Record not found'}))
         
     return HttpResponse(
         json.dumps(

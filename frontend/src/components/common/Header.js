@@ -26,10 +26,6 @@ const Header = () => {
                     <li className="nav-item text-white">
                         <NavDropdown className="text-white" title={<span className="text-white ">Mercancía</span>} id="basic-nav-dropdown">
                             <NavDropdown.Item>
-                                <Link id="RouterNavLink" to="/inventaries" className="nav-link text-black">Inventarios</Link>
-                            </NavDropdown.Item>
-                            <NavDropdown.Divider />
-                            <NavDropdown.Item>
                                 <Link id="RouterNavLink" to="/orders" className="nav-link text-black">Órdenes de Compra</Link>
                             </NavDropdown.Item>
                             <NavDropdown.Divider />

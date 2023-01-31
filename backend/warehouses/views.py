@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from django.http import HttpResponse, JsonResponse
+from django.http import HttpResponse, HttpResponseBadRequest
 from bson.objectid import ObjectId
 from django.views.decorators.http import require_http_methods
 from utils import get_db_handle
@@ -19,7 +19,7 @@ def get_warehouse(request) -> HttpResponse:
     sub_inventory = request.GET['sub_inventory']
     res = list(collection.find({'sub_inventory': sub_inventory}))
     if not res: 
-        return HttpResponse(json.dumps({'status': 404, 'body': 'Record not found'}))
+        return HttpResponseBadRequest(json.dumps({'status': 404, 'body': 'Record not found'}))
         
     return HttpResponse(
         json.dumps(
@@ -71,4 +71,4 @@ def create_warehouse(request) -> HttpResponse:
                         'Access-Control-Allow-Methods': 'POST'
                 },'message': 'The record has been succesfully created'}))
         
-    return HttpResponse(json.dumps({'status': 404, 'body': 'Record already exists'}))
+    return HttpResponseBadRequest(json.dumps({'status': 404, 'body': 'Record already exists'}))
