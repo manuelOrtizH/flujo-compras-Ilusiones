@@ -1,4 +1,4 @@
-from django.http import HttpResponse
+from django.http import HttpResponse, HttpResponseBadRequest
 from django.views.decorators.http import require_http_methods
 from utils import get_db_handle, upload_file
 from orders.models import Order
@@ -24,7 +24,7 @@ def create_order(request) -> HttpResponse:
     is_file_valid,df = file_handler(filename, root='ordenes-de-compra')
     is_unique_sub_inventory_col = lambda col: len(col.unique()) == len(col)
     if not is_file_valid and not is_unique_sub_inventory_col(df.iloc[:,0]):
-        return HttpResponse(json.dumps({'status': 404, 'message': 'The file is not valid'}))
+        return HttpResponseBadRequest(json.dumps({'status': 404, 'message': 'The file is not valid'}))
     
     df.reset_index()
     cols = df.columns.values
@@ -46,14 +46,14 @@ def create_order(request) -> HttpResponse:
             try:
                 upload_file(filename,root=f'ordenes-de-compra/{filename}')
             except Exception as e:
-                return HttpResponse(json.dumps({'status': 404, 'body': 'An error occurred when uploading the file', 'error': e}))
+                return HttpResponseBadRequest(json.dumps({'status': 404, 'body': 'An error occurred when uploading the file', 'error': e}))
 
             os.remove(filename)
             order_obj = Order()
             try:
                 order_obj.file = f"s3://m2crowd-ilusiones-bucket1/ordenes-de-compra/{filename}"
             except Exception as e:
-                return HttpResponse(json.dumps({'status': 404, 'body': 'An error occurred with the given data','error': e}))
+                return HttpResponseBadRequest(json.dumps({'status': 404, 'body': 'An error occurred with the given data','error': e}))
             
             collection.insert({
                 'date': order_obj.date,

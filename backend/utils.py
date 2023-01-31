@@ -51,6 +51,10 @@ def upload_file(filename: str, root: str):
     with open(filename, 'rb') as f:
         client.upload_fileobj(f, 'm2crowd-ilusiones-bucket1', root)
 
+
+
+
+
 def update_list(**data):
     '''
     Method to update a list based on the next values:
