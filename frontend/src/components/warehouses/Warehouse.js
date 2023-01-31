@@ -1,5 +1,5 @@
 
-import Card from '../common/CardWarehouse';
+import OptionsCard from "./OptionsCard";
 import { React } from "react";
 
 const Warehouse = () => {
@@ -11,7 +11,7 @@ const Warehouse = () => {
             <hr></hr>
             <div className="row">
                 <div className="col text-center">
-                    <Card
+                    <OptionsCard
                         title={'Registro de almacenes'}
                         description={'Crea y registra los diferentes almacenes con los que se trabaja.'}
                         imageUrl={'https://images.unsplash.com/photo-1493946740644-2d8a1f1a6aff?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1490&q=80'}
@@ -19,7 +19,7 @@ const Warehouse = () => {
                     />
                 </div>
                 <div className="col text-center">
-                    <Card
+                    <OptionsCard
                         title={'Consulta de almacenes'}
                         description={'Obtén la información acerca de los almacenes actuales.'}
                         imageUrl={'https://images.unsplash.com/photo-1624927637280-f033784c1279?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1474&q=80'}

@@ -2,7 +2,7 @@ import {React,useState} from "react";
 import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
 
-const CreateWarehouseModal = (props) => {
+const ModalWarehouse = (props) => {
     const {handleSubmit, ...res} = props
     const [formData, setFormData] = useState({});
     const onCustomFormChange = e => setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -58,4 +58,4 @@ const CreateWarehouseModal = (props) => {
 };
 
 
-export default CreateWarehouseModal;
+export default ModalWarehouse;
