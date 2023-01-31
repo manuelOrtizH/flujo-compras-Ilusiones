@@ -1,70 +1,49 @@
-# Getting Started with Create React App
+# Ilusiones S.A de C.V
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+La empresa Ilusiones S.A. de C.V. vende equipos celulares y necesita realizar compras de mercancía
+a través de 2 archivos que envía la empresa matriz y que corresponden a 2 archivos: un archivo Excel
+de Orden de Compras y otro archivo Excel de Recepción de Mercancía.
 
-## Available Scripts
+# Requisitos de instalación:
 
-In the project directory, you can run:
+- [Python 3.10](https://www.python.org/downloads/)
+- [React](https://beta.reactjs.org/learn/installation)
+- Variables de entorno que correspondan a la siguiente infomación:
+  - HOSTNAME: El host donde se almacena la base de datos
+  - SECRET_KEY: Llave secreta para el backend
+  - AWS_ACCESS_KEY_ID: La llave de acceso para el S3 Bucket
+  - AWS_SECRET_ACCESS_KEY: La llave de secreta para el S3 Bucket
+  - AWS_STORAGE_BUCKET_NAME: El nombre del S3 Bucket
+  - REACT_API_URL: 
 
-### `npm start`
+# Pasos de instalación
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+Para correr el backend, necesario activar o crear el <i>virutal environment</i>
+Seguir en los siguientes pasos
+  1. Correr en la terminal para activar el <i>virutal environment</i>
+      ```
+      source env/bin/activate
+      ```
+  2. Dirigirse a la carpeta de backend
+  3. Instalar dependencias del backend
+      ```
+      python3 -r requirements.txt
+      ```
+  4. Correr proyecto
+      ```
+      python3 manage.py runserver
+      ```
+      
+  Para correr el frontend:
+   1. Instalar dependencias
+      ```
+      npm install
+      ```
+   2. Correr el proyecto
+      ```
+      npm run start
+      ```
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+#Arquitectura del Proyecto
 
-### `npm test`
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
-
-### `npm run build`
-
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
-
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
-
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
-
-### `npm run eject`
-
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
-
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
-
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
